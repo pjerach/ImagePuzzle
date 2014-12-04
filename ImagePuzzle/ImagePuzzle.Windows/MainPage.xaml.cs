@@ -51,6 +51,7 @@ namespace ImagePuzzle
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled; //For page caching
         }
 
         /// <summary>
@@ -66,6 +67,21 @@ namespace ImagePuzzle
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            if (e.PageState != null && e.PageState.ContainsKey("greetingOutputText"))
+            {
+                //greetingOutput.Text = e.PageState["greetingOutputText"].ToString();
+            }
+
+
+            // Restore values stored in app data.
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            //needs to match new names
+            //if (roamingSettings.Values.ContainsKey("userName"))
+            //{
+            //    nameInput.Text = roamingSettings.Values["userName"].ToString();
+            //}
+
+
         }
 
         /// <summary>
@@ -78,6 +94,11 @@ namespace ImagePuzzle
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            //This saves the object directly
+            //Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            //roamingSettings.Values["userName"] = nameInput.Text;
+
+            //e.PageState["greetingOutputText"] = greetingOutput.Text; //The object in which you would like to save
         }
 
         #region NavigationHelper registration

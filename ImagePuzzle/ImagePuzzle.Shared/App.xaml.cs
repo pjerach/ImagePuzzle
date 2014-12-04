@@ -45,7 +45,7 @@ namespace ImagePuzzle
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
@@ -62,6 +62,7 @@ namespace ImagePuzzle
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+                ImagePuzzle.Common.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
 
                 // TODO: change this value to a cache size that is appropriate for your application
                 rootFrame.CacheSize = 1;
@@ -69,6 +70,7 @@ namespace ImagePuzzle
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     // TODO: Load state from previously suspended application
+                    await ImagePuzzle.Common.SuspensionManager.RestoreAsync();
                 }
 
                 // Place the frame in the current Window
@@ -126,10 +128,10 @@ namespace ImagePuzzle
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-
+            await ImagePuzzle.Common.SuspensionManager.SaveAsync();
             // TODO: Save application state and stop any background activity
             deferral.Complete();
         }
